@@ -160,6 +160,7 @@ void move_frog_forward(void) {
 	if(frog_alive && frog_row == RIVERBANK_ROW) {
 		riverbank_status |= (1<<frog_column);
 		add_to_score(10);
+		halfway_awarded = 0;
 	}
 }
 

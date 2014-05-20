@@ -135,7 +135,7 @@ void play_game(void) {
 	
 	// We play the game while the frog is alive and we haven't filled up the 
 	// far riverbank
-	while(lives != 0 && !is_riverbank_full()) {
+	while(get_lives() != 0 && !is_riverbank_full()) {
 		if(is_frog_alive() && frog_has_reached_riverbank()) {
 			// Frog reached the other side successfully but the
 			// riverbank isn't full, put a new frog at the start

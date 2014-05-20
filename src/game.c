@@ -160,6 +160,7 @@ void move_frog_backward(void) {
 }
 
 void move_frog_left(void) {
+  // frog cannot move any further left
 	if(frog_column == 0) {
 	  return;
 	}
@@ -173,15 +174,23 @@ void move_frog_left(void) {
 	// move frog left and update display appropriately
 	frog_column--;
 	redraw_frog();
-
-	// Comments to aid implementation:
-	// If the frog is already at the left hand side then do nothing (can't move further)
-	// Otherwise redraw the row the frog is currently on (i.e. without the frog), check 
-	// whether the frog will live or not, update the frog position and redraw the frog.
 }
 
 void move_frog_right(void) {
-	// Unimplemented
+	// frog cannot move any further right
+  if(frog_column == 15) {
+    return;
+  }
+
+  // remove frog
+  redraw_row(frog_row);
+
+  // check if frog is alive
+  frog_alive = frog_alive_at(frog_row, frog_column+1);
+
+  // move frog right and update display appropriately
+  frog_column++;
+  redraw_frog();
 }
 
 uint8_t get_frog_row(void) {

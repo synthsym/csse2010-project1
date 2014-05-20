@@ -143,7 +143,20 @@ void move_frog_forward(void) {
 }
 
 void move_frog_backward(void) {
-	// Unimplemented
+  //frog cannot move any further backwards
+  if(frog_row == 0) {
+    return;
+  }
+
+  //remove frog
+	redraw_row(frog_row);
+
+	//check if frog is alive
+	frog_alive = frog_alive_at(frog_row-1, frog_column);
+
+	//move frog backwards and update display appropriately.
+	frog_row--;
+	redraw_frog();
 }
 
 void move_frog_left(void) {

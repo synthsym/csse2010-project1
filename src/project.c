@@ -17,6 +17,7 @@
 #include "serialio.h"
 #include "terminalio.h"
 #include "score.h"
+#include "lives.h"
 #include "timer0.h"
 #include "game.h"
 
@@ -110,6 +111,9 @@ void new_game(void) {
 	// Initialise the score
 	init_score();
 	
+  // give three lives
+  init_lives();
+
 	// Clear a button push or serial input if any are waiting
 	// (The cast to void means the return value is ignored.)
 	(void)button_pushed();
@@ -122,6 +126,8 @@ void play_game(void) {
 	char serial_input, escape_sequence_char;
 	uint8_t characters_into_escape_sequence = 0;
 	
+	// game lives
+
 	// Get the current time and remember this as the last time the vehicles
 	// and logs were moved.
 	current_time = get_clock_ticks();
@@ -129,13 +135,19 @@ void play_game(void) {
 	
 	// We play the game while the frog is alive and we haven't filled up the 
 	// far riverbank
-	while(is_frog_alive() && !is_riverbank_full()) {
+	while(lives != 0 && !is_riverbank_full()) {
 		if(is_frog_alive() && frog_has_reached_riverbank()) {
 			// Frog reached the other side successfully but the
 			// riverbank isn't full, put a new frog at the start
 			put_frog_at_start();
 		}
 		
+		// remove a life if the frog dies
+		if(!is_frog_alive()) {
+		  remove_life();
+		  put_frog_at_start();
+		}
+
 		// Check for input - which could be a button push or serial input.
 		// Serial input may be part of an escape sequence, e.g. ESC [ D
 		// is a left cursor key press. At most one of the following three
@@ -209,7 +221,11 @@ void play_game(void) {
 			scroll_log_channel(1, 1);
 			last_move_time = current_time;
 		}
+
+		// display the number of lives
+		display_lives();
 	}
+
 	// We get here if the frog is dead or the riverbank is full
 	// The game is over.
 }

@@ -143,24 +143,37 @@ void move_frog_forward(void) {
 }
 
 void move_frog_backward(void) {
-  //frog cannot move any further backwards
+  // frog cannot move any further backwards
   if(frog_row == 0) {
     return;
   }
 
-  //remove frog
+  // remove frog
 	redraw_row(frog_row);
 
-	//check if frog is alive
+	// check if frog is alive
 	frog_alive = frog_alive_at(frog_row-1, frog_column);
 
-	//move frog backwards and update display appropriately.
+	// move frog backwards and update display appropriately.
 	frog_row--;
 	redraw_frog();
 }
 
 void move_frog_left(void) {
-	// Unimplemented
+	if(frog_column == 0) {
+	  return;
+	}
+
+	// remove frog
+	redraw_row(frog_row);
+
+	// check if frog is alive
+	frog_alive = frog_alive_at(frog_row, frog_column-1);
+
+	// move frog left and update display appropriately
+	frog_column--;
+	redraw_frog();
+
 	// Comments to aid implementation:
 	// If the frog is already at the left hand side then do nothing (can't move further)
 	// Otherwise redraw the row the frog is currently on (i.e. without the frog), check 

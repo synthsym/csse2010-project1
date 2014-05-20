@@ -24,7 +24,7 @@ void spi_setup_master(uint8_t clockdivider) {
 	// Set up the SPI control registers SPCR and SPSR:
 	// - SPE bit = 1 (SPI is enabled)
 	// - MSTR bit = 1 (Master Mode)
-	SPCR0 = (1<<SPE0)|(1<<MSTR0);
+	SPCR = (1<<SPE)|(1<<MSTR);
 	
 	// Set SPR0 and SPR1 bits in SPCR and SPI2X bit in SPSR
 	// based on the given clock divider
@@ -34,23 +34,23 @@ void spi_setup_master(uint8_t clockdivider) {
 		case 2:
 		case 8:
 		case 32:
-			SPSR0 = (1<<SPI2X0);
+			SPSR = (1<<SPI2X);
 			break;
 		default:
-			SPSR0 = 0;
+			SPSR = 0;
 			break;
 	}
 	switch(clockdivider) {
 		case 128:
-			SPCR0 |= (1<<SPR00);
+			SPCR |= (1<<SPR0);
 			// Note this flows through to the next code block
 		case 32:
 		case 64:
-			SPCR0 |= (1<<SPR10);
+			SPCR |= (1<<SPR1);
 			break;
 		case 8:
 		case 16:
-			SPCR0 |= (1<<SPR00);
+			SPCR |= (1<<SPR0);
 			break;
 	}
 	
@@ -65,9 +65,9 @@ uint8_t spi_send_byte(uint8_t byte) {
 	// complete. (The final read of SPSR followed by a read of SPDR
 	// will cause the SPIF bit to be reset to 0. See page 173 of the 
 	// ATmega324A datasheet.)
-	SPDR0 = byte;
-	while((SPSR0 & (1<<SPIF0)) == 0) {
+	SPDR = byte;
+	while((SPSR & (1<<SPIF)) == 0) {
 		; // wait
 	}
-	return SPDR0;
+	return SPDR;
 }

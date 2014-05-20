@@ -75,8 +75,8 @@ void splash_screen(void) {
 	// Output the scrolling message to the LED matrix
 	// and wait for a push button to be pushed.
 	ledmatrix_clear();
-	set_text_colour(COLOUR_ORANGE);
 	while(1) {
+	  set_text_colour(COLOUR_ORANGE);
 		set_scrolling_display_text("FROGGER");
 		// Scroll the message until it has scrolled off the 
 		// display or a button is pushed
@@ -86,6 +86,8 @@ void splash_screen(void) {
 				return;
 			}
 		}
+
+		set_text_colour(COLOUR_GREEN);
 		set_scrolling_display_text("43585746");
 		// Scroll the message until it has scrolled off the
     // display or a button is pushed

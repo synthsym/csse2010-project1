@@ -18,6 +18,9 @@ static int8_t frog_column;
 // Boolean flag to indicate whether the frog is alive or not
 static uint8_t frog_alive;
 
+// Boolean flag to indicate if halfway points have already been awarded.
+static uint8_t halfway_awarded;
+
 // Vehicle data - 32 bits in each lane which we loop continuously. A 1
 // indicates the presence of a vehicle, 0 is empty.
 // Index 0 to 2 corresponds to lanes 1 to 3 respectively. Lanes 1 and 3
@@ -99,6 +102,10 @@ void init_game(void) {
 	lane_position[0] = lane_position[1] = lane_position[2] = 0;
 	log_position[0] = log_position[1] = 0;
 	
+	// reset score
+	init_score();
+	halfway_awarded = 0;
+
 	// Initial riverbank pattern
 	riverbank = RIVERBANK;
 	riverbank_status = RIVERBANK;
@@ -136,9 +143,24 @@ void move_frog_forward(void) {
 	frog_row++;
 	redraw_frog();
 	
+	// add 1 to the score
+	add_to_score(1);
+
+	// award halfway points if frog has reached the halfway point
+	if(frog_row == HALFWAY_ROW) {
+	  // if the halfway mark hasn't already been awarded
+	  if(!halfway_awarded) {
+	    add_to_score(5);
+	    halfway_awarded = 1;
+	  }
+	}
+
 	// If the frog has ended up successfully in row 7 - add it to the riverbank_status flag
+	// also add 10 to the score
 	if(frog_alive && frog_row == RIVERBANK_ROW) {
 		riverbank_status |= (1<<frog_column);
+		add_to_score(10);
+		halfway_awarded = 0;
 	}
 }
 

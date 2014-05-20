@@ -213,16 +213,19 @@ void play_game(void) {
 }
 
 void handle_game_over() {
+  uint8_t score_str[10] = "";
+  sprintf(score_str, "SCORE %i", get_score());
+
 	move_cursor(10,14);
 	printf_P(PSTR("GAME OVER"));
 	move_cursor(10,15);
+	printf_P(score_str);
+	move_cursor(10,16);
 	printf_P(PSTR("Press a button to start again"));
 	
 	ledmatrix_clear();
 	set_text_colour(COLOUR_GREEN);
 	while(1) {
-	  uint8_t score_str[10] = "";
-	  sprintf(score_str, "SCORE %i", get_score());
     set_scrolling_display_text(score_str);
     // Scroll the message until it has scrolled off the
     // display or a button is pushed

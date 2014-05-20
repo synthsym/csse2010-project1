@@ -9,6 +9,7 @@
 #define LIVES_H_
 
 #include <stdint.h>
+#include <avr/io.h>
 
 void init_lives(void);
 void add_life(void);

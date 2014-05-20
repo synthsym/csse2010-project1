@@ -217,8 +217,17 @@ void handle_game_over() {
 	printf_P(PSTR("GAME OVER"));
 	move_cursor(10,15);
 	printf_P(PSTR("Press a button to start again"));
-	while(button_pushed() == -1) {
-		; // wait
-	}
 	
+	ledmatrix_clear();
+	while(1) {
+	    set_scrolling_display_text("SCORE " + get_score());
+	    // Scroll the message until it has scrolled off the
+	    // display or a button is pushed
+	    while(scroll_display()) {
+	      _delay_ms(150);
+	      if(button_pushed() != -1) {
+	        return;
+	      }
+	    }
+	  }
 }

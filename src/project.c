@@ -232,7 +232,7 @@ void play_game(void) {
 
 void handle_game_over() {
   uint8_t score_str[10] = "";
-  sprintf(score_str, "SCORE %i", get_score());
+  snprintf(score_str, "SCORE %i", get_score());
 
 	move_cursor(10,14);
 	printf_P(PSTR("GAME OVER"));

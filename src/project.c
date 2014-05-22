@@ -125,6 +125,7 @@ void play_game(void) {
 	int8_t button;
 	char serial_input, escape_sequence_char;
 	uint8_t characters_into_escape_sequence = 0;
+	uint8_t game_paused = 0;
 	
 	// Get the current time and remember this as the last time the vehicles
 	// and logs were moved.
@@ -186,28 +187,38 @@ void play_game(void) {
 			}
 		}
 		
-		// Process the input. 
-		if(button==3 || escape_sequence_char=='D' || serial_input=='L' || serial_input=='l') {
-			// Attempt to move left
-			move_frog_left();
-		} else if(button==2 || escape_sequence_char=='A' || serial_input=='U' || serial_input=='u') {
-			// Attempt to move forward
-			move_frog_forward();
-		} else if(button==1 || escape_sequence_char=='B' || serial_input=='D' || serial_input=='d') {
-			// Attempt to move down
-			move_frog_backward();
-		} else if(button==0 || escape_sequence_char=='C' || serial_input=='R' || serial_input=='r') {
-			// Attempt to move right
-			move_frog_right();
-		} else if(serial_input == 'p' || serial_input == 'P') {
-			// Unimplemented feature - pause/unpause the game until 'p' or 'P' is
-			// pressed again
-		} 
+		// Process the input only if the game isn't paused.
+		if(!game_paused) {
+      if(button==3 || escape_sequence_char=='D' || serial_input=='L' || serial_input=='l') {
+        // Attempt to move left
+        move_frog_left();
+      } else if(button==2 || escape_sequence_char=='A' || serial_input=='U' || serial_input=='u') {
+        // Attempt to move forward
+        move_frog_forward();
+      } else if(button==1 || escape_sequence_char=='B' || serial_input=='D' || serial_input=='d') {
+        // Attempt to move down
+        move_frog_backward();
+      } else if(button==0 || escape_sequence_char=='C' || serial_input=='R' || serial_input=='r') {
+        // Attempt to move right
+        move_frog_right();
+      }
+		}
+		// else - invalid input or we're part way through an escape sequence -
+		// do nothing
+
+		// Deal with the pause game state
+		if(serial_input == 'p' || serial_input == 'P') {
+      if(game_paused) {
+        game_paused = 0;
+      } else {
+        game_paused = 1;
+      }
+    }
 		// else - invalid input or we're part way through an escape sequence -
 		// do nothing
 		
 		current_time = get_clock_ticks();
-		if(is_frog_alive()) {
+		if(is_frog_alive() && !game_paused) {
 		  if(current_time % 1000 == 0) {
         scroll_log_channel(1, 1);
 		  }

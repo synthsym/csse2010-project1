@@ -11,7 +11,7 @@ uint8_t lives;
 
 void init_lives(void) {
   // set ports for interacting with lives LEDS
-  DDRA |= (1 << PINA7) | (1 << PINA6) | (1 << PINA5);
+  DDRA |= 0xF0;
 
   lives = 3;
 }
@@ -36,10 +36,10 @@ uint8_t get_lives(void) {
 
 void display_lives(void) {
   // remove previous output
-  PORTA &= 0xF0;
+  PORTA &= 0x0F;
 
   // set the required bits
-  for(int i = 0; i < lives; ++i) {
+  for(uint8_t i = 7; i > 7-lives; i--) {
     PORTA |= (1 << i);
   }
 }

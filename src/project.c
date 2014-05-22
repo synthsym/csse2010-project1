@@ -210,8 +210,12 @@ void play_game(void) {
 		if(serial_input == 'p' || serial_input == 'P') {
       if(game_paused) {
         game_paused = 0;
+        clear_terminal();
       } else {
         game_paused = 1;
+        move_cursor(10,14);
+        printf_P(PSTR("Game Paused!"));
+
       }
     }
 		// else - invalid input or we're part way through an escape sequence -

@@ -121,7 +121,7 @@ void new_game(void) {
 }
 
 void play_game(void) {
-	uint32_t current_time, last_move_time;
+	uint32_t current_time;
 	int8_t button;
 	char serial_input, escape_sequence_char;
 	uint8_t characters_into_escape_sequence = 0;
@@ -129,7 +129,6 @@ void play_game(void) {
 	// Get the current time and remember this as the last time the vehicles
 	// and logs were moved.
 	current_time = get_clock_ticks();
-	last_move_time = current_time;
 	
 	// We play the game while the frog is alive and we haven't filled up the 
 	// far riverbank

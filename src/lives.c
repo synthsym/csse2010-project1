@@ -18,7 +18,7 @@ void init_lives(void) {
 
 void add_life(void) {
   // cap at max 3 lives
-  if(lives < 3) {
+  if(lives < 5) {
     lives++;
   }
 }

@@ -126,8 +126,6 @@ void play_game(void) {
 	char serial_input, escape_sequence_char;
 	uint8_t characters_into_escape_sequence = 0;
 	
-	// game lives
-
 	// Get the current time and remember this as the last time the vehicles
 	// and logs were moved.
 	current_time = get_clock_ticks();
@@ -210,16 +208,26 @@ void play_game(void) {
 		// do nothing
 		
 		current_time = get_clock_ticks();
-		if(is_frog_alive() && current_time >= last_move_time + 1000) {
-			// 1000ms (1 second) has passed since the last time we moved
-			// the vehicles and logs - move them again and keep track of
-			// the time when we did this. 
-			scroll_lane(0, 1);
-			scroll_lane(1, -1);
-			scroll_lane(2, 1);
-			scroll_log_channel(0, -1);
-			scroll_log_channel(1, 1);
-			last_move_time = current_time;
+		if(is_frog_alive()) {
+		  if(current_time % 1000 == 0) {
+        scroll_log_channel(1, 1);
+		  }
+
+		  if(current_time % 1100 == 0) {
+		    scroll_lane(1, -1);
+		  }
+
+		  if(current_time % 1200 == 0) {
+		    scroll_lane(0, 1);
+		  }
+
+		  if(current_time % 800 == 0) {
+		    scroll_lane(2, 1);
+		  }
+
+		  if(current_time % 600 == 0) {
+		    scroll_log_channel(0, -1);
+		  }
 		}
 
 		// display the number of lives

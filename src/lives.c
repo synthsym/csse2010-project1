@@ -34,6 +34,10 @@ uint8_t get_lives(void) {
   return lives;
 }
 
+uint8_t is_supa_dead(void) {
+  return (lives == 0);
+}
+
 void display_lives(void) {
   // remove previous output
   PORTA &= 0x0F;

@@ -30,7 +30,11 @@ void initialise_hardware(void);
 void splash_screen(void);
 void new_game(void);
 void play_game(void);
+void next_level(void);
 void handle_game_over(void);
+
+// Variables
+static uint8_t level;
 
 // ASCII code for Escape character
 #define ESCAPE_CHAR 27
@@ -47,8 +51,12 @@ int main(void) {
 	
 	while(1) {
 		new_game();
-		play_game();
-		handle_game_over();
+		if(is_supa_dead()) {
+		  handle_game_over();
+		} else {
+		  next_level();
+      play_game();
+		}
 	}
 }
 
@@ -105,6 +113,9 @@ void new_game(void) {
 	// Initialise the game and display
 	init_game();
 	
+	// Set initial level
+	level = 0;
+
 	// Clear the serial terminal
 	clear_terminal();
 	
@@ -133,7 +144,7 @@ void play_game(void) {
 	
 	// We play the game while the frog is alive and we haven't filled up the 
 	// far riverbank
-	while(get_lives() != 0 && !is_riverbank_full()) {
+	while(!is_supa_dead() && !is_riverbank_full()) {
 		if(is_frog_alive() && frog_has_reached_riverbank()) {
 			// Frog reached the other side successfully but the
 			// riverbank isn't full, put a new frog at the start
@@ -248,8 +259,34 @@ void play_game(void) {
 		display_lives();
 	}
 
-	// We get here if the frog is dead or the riverbank is full
+	// We get here if the frog is supa-dead (has no more lives) or the riverbank is full
 	// The game is over.
+}
+
+void next_level() {
+  level++;
+  add_life();
+  ledmatrix_clear();
+  move_cursor(10,14);
+  printf_P(PSTR("CONGRATULATION"));
+  move_cursor(10,15);
+  printf_P(PSTR("Level %i"), level);
+  move_cursor(10,16);
+  printf_P(PSTR("Score: %i"), get_score());
+  move_cursor(10,17);
+  printf_P(PSTR("Press any button to continue"));
+
+  set_text_colour(COLOUR_RED);
+  while(1) {
+    set_scrolling_display_text("Level");
+
+    while(scroll_display()) {
+      _delay_ms(150);
+      if(button_pushed() != -1) {
+        return;
+      }
+    }
+  }
 }
 
 void handle_game_over() {

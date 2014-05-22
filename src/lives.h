@@ -15,6 +15,7 @@ void init_lives(void);
 void add_life(void);
 void remove_life(void);
 uint8_t get_lives(void);
+uint8_t is_supa_dead(void);
 void display_lives(void);
 
 #endif /* LIVES_H_ */

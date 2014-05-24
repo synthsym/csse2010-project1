@@ -237,23 +237,23 @@ void play_game(void) {
 		
 		current_time = get_clock_ticks();
 		if(is_frog_alive() && !game_paused) {
-		  if(current_time % 1000 == 0) {
+		  if(current_time % (1000 + (50 * level)) == 0) {
         scroll_log_channel(1, 1);
 		  }
 
-		  if(current_time % 1100 == 0) {
+		  if(current_time % (1100 + (50 * level)) == 0) {
 		    scroll_lane(1, -1);
 		  }
 
-		  if(current_time % 1200 == 0) {
+		  if(current_time % (1200 + (50 * level)) == 0) {
 		    scroll_lane(0, 1);
 		  }
 
-		  if(current_time % 800 == 0) {
+		  if(current_time % (800 + (50 * level)) == 0) {
 		    scroll_lane(2, 1);
 		  }
 
-		  if(current_time % 600 == 0) {
+		  if(current_time % (600 + (50 * level)) == 0) {
 		    scroll_log_channel(0, -1);
 		  }
 		}

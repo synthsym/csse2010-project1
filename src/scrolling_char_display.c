@@ -135,6 +135,8 @@ void set_text_colour(PixelColour c) {
  */
 void set_scrolling_display_text(char* string_to_display) {
 	displayString = string_to_display;
+	next_char_to_display = 0;
+	next_col_ptr = 0;
 }
 
 /*

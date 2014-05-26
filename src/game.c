@@ -150,7 +150,7 @@ void move_frog_forward(void) {
 	if(frog_row == HALFWAY_ROW) {
 	  // if the halfway mark hasn't already been awarded
 	  if(!halfway_awarded) {
-	    add_to_score(5);
+	    add_to_score(4);
 	    halfway_awarded = 1;
 	  }
 	}
@@ -159,7 +159,7 @@ void move_frog_forward(void) {
 	// also add 10 to the score
 	if(frog_alive && frog_row == RIVERBANK_ROW) {
 		riverbank_status |= (1<<frog_column);
-		add_to_score(10);
+		add_to_score(9);
 		halfway_awarded = 0;
 	}
 }

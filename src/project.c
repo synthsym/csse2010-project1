@@ -18,6 +18,7 @@
 #include "terminalio.h"
 #include "score.h"
 #include "lives.h"
+#include "joystick.h"
 #include "timer0.h"
 #include "game.h"
 
@@ -72,6 +73,8 @@ void initialise_hardware(void) {
 	
 	init_timer0();
 	
+	init_joystick();
+
 	// Turn on global interrupts
 	sei();
 }
@@ -135,6 +138,7 @@ void new_game(void) {
 void play_game(void) {
 	uint32_t current_time;
 	int8_t button;
+	int8_t joystick;
 	char serial_input, escape_sequence_char;
 	uint8_t characters_into_escape_sequence = 0;
 	uint8_t game_paused = 0;
@@ -201,24 +205,26 @@ void play_game(void) {
 			}
 		}
 		
-		// Process the input only if the game isn't paused.
-		if(!game_paused) {
-      if(button==3 || escape_sequence_char=='D' || serial_input=='L' || serial_input=='l') {
+		joystick = joystick_direction();
+
+    // Process the input only if the game isn't paused.
+    if(!game_paused) {
+      if(button==3 || escape_sequence_char=='D' || serial_input=='L' || serial_input=='l' || joystick==3) {
         // Attempt to move left
         move_frog_left();
-      } else if(button==2 || escape_sequence_char=='A' || serial_input=='U' || serial_input=='u') {
+      } else if(button==2 || escape_sequence_char=='A' || serial_input=='U' || serial_input=='u' || joystick==2) {
         // Attempt to move forward
         move_frog_forward();
-      } else if(button==1 || escape_sequence_char=='B' || serial_input=='D' || serial_input=='d') {
+      } else if(button==1 || escape_sequence_char=='B' || serial_input=='D' || serial_input=='d' || joystick==1) {
         // Attempt to move down
         move_frog_backward();
-      } else if(button==0 || escape_sequence_char=='C' || serial_input=='R' || serial_input=='r') {
+      } else if(button==0 || escape_sequence_char=='C' || serial_input=='R' || serial_input=='r' || joystick==0) {
         // Attempt to move right
         move_frog_right();
       }
-		}
-		// else - invalid input or we're part way through an escape sequence -
-		// do nothing
+      // else - invalid input or we're part way through an escape sequence -
+      // do nothing
+    }
 
 		// Deal with the pause game state
 		if(serial_input == 'p' || serial_input == 'P') {
@@ -267,19 +273,20 @@ void play_game(void) {
 }
 
 void next_level() {
-  if(level != 0) {
-    add_life();
-  }
   level++;
+  if(level > 1) {
+    add_life();
 
-  move_cursor(10,14);
-  printf_P(PSTR("CONGRATULATION"));
-  move_cursor(10,15);
-  printf_P(PSTR("Level %i"), level);
-  move_cursor(10,16);
-  printf_P(PSTR("Score: %i"), get_score());
-  move_cursor(10,17);
-  printf_P(PSTR("Press any button to continue"));
+    clear_terminal();
+    move_cursor(10,14);
+    printf_P(PSTR("CONGRATULATION"));
+    move_cursor(10,15);
+    printf_P(PSTR("Level %i"), level);
+    move_cursor(10,16);
+    printf_P(PSTR("Score: %i"), get_score());
+    move_cursor(10,17);
+    printf_P(PSTR("Press any button to continue"));
+  }
 
   ledmatrix_clear();
   set_text_colour(COLOUR_RED);
@@ -298,6 +305,7 @@ void next_level() {
 void handle_game_over() {
   game_over = 1;
 
+  clear_terminal();
 	move_cursor(10,14);
 	printf_P(PSTR("GAME OVER"));
 	move_cursor(10,15);

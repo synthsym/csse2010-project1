@@ -9,12 +9,11 @@
 #include <avr/eeprom.h>
 
 uint8_t is_highscore(uint16_t score) {
-  for(uint8_t i = 1; i <= LIST_SIZE; i++) {
-    highscore temp = read_highscore(i);
-    if(temp.valid) {
-      if(score >= temp.score) {
-        return 1;
-      }
+  highscore scores[LIST_SIZE];
+  eeprom_read_block(scores, 0, sizeof(highscore[LIST_SIZE]));
+  for(uint8_t i = 0; i < LIST_SIZE; i++) {
+    if(score >= temp[i].score) {
+      return 1;
     }
   }
 
@@ -22,20 +21,32 @@ uint8_t is_highscore(uint16_t score) {
 }
 
 void update_highscores(char name[3], uint16_t score) {
-  highscore new_score = {SIGNATURE_BYTE, name, score};
+  highscore new_score = {name, score};
+  highscore new_scores[LIST_SIZE];
+  highscore scores[LIST_SIZE];
 
+  eeprom_read_block(scores, 0, sizeof(highscore[LIST_SIZE]));
+
+  //insert the new score when we find a score that is less or equal
+  uint8_t i;
+  for(i = 0; i < LIST_SIZE; i++) {
+    if(scores[i].score <= new_score.score) {
+      new_scores[i] = new_score;
+      break;
+    } else {
+      new_scores[i] = scores[i];
+    }
+  }
+
+  // fill the last positions with stuff from the old leaderboard
+  for(uint8_t j = i; j < LIST_SIZE-1; j++) {
+    new_scores[j+1] = scores[j];
+  }
+
+  // update the eeprom
+  eeprom_update_block(new_scores, 0, sizeof(new_scores));
 }
 
 void show_highscores(void) {
 
 }
-
-void write_highscore(uint8_t pos, highscore score) {
-  eeprom_update_block(score, pos-1, sizeof(highscore));
-}
-
-highscore read_highscore(uint8_t pos) {
-  highscore temp;
-  eeprom_read_block(temp, pos-1, sizeof(highscore));
-}
-

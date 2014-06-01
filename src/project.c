@@ -148,6 +148,7 @@ void play_game(void) {
 	current_time = get_clock_ticks();
 	
 	init_game();
+	clear_terminal();
 
 	// We play the game while the frog is alive and we haven't filled up the 
 	// far riverbank
@@ -266,8 +267,6 @@ void play_game(void) {
 
 		// display the number of lives
 		display_lives();
-		move_cursor(10, 11);
-		printf()
 	}
 
 	// We get here if the frog is supa-dead (has no more lives) or the riverbank is full
@@ -285,7 +284,6 @@ void next_level() {
   printf_P(PSTR("Level %i"), level);
   move_cursor(10,16);
   printf_P(PSTR("Score: %i"), get_score());
-  move_cursor(10,17);
 
   ledmatrix_clear();
   set_text_colour(COLOUR_RED);

@@ -12,7 +12,7 @@ uint8_t is_highscore(uint16_t score) {
   highscore scores[LIST_SIZE];
   eeprom_read_block(scores, 0, sizeof(highscore[LIST_SIZE]));
   for(uint8_t i = 0; i < LIST_SIZE; i++) {
-    if(score >= temp[i].score) {
+    if(score >= scores[i].score) {
       return 1;
     }
   }

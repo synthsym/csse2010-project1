@@ -64,7 +64,7 @@ int8_t joystick_direction(void) {
   if(dir >= 0) { //If a direction has been selected, not rest
     if (p_dir == dir) { //If the current direction is the same as the last direction
       t = get_clock_ticks();
-      if(t < prev_t + 250) { // Has 500ms elapsed since last direction
+      if(t < prev_t + 250) { // Has 250ms elapsed since last direction
         return -1;
       }
     }
@@ -73,6 +73,6 @@ int8_t joystick_direction(void) {
     prev_t = get_clock_ticks();
     return dir;
   } else {
-    return dir; // dir is -1
+    return -1; // dir is -1
   }
 }

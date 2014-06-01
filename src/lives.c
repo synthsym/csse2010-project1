@@ -6,6 +6,9 @@
  */
 
 #include "lives.h"
+#include <avr/pgmspace.h>
+#include <stdio.h>
+#include "terminalio.h"
 
 uint8_t lives;
 
@@ -21,8 +24,6 @@ void add_life(void) {
   if(lives < 4) {
     lives++;
   }
-  move_cursor(10, 11);
-  printf_P(PSTR("Lives: %i"), lives);
 }
 
 void remove_life(void) {
@@ -30,6 +31,8 @@ void remove_life(void) {
   if(lives > 0) {
     lives--;
   }
+  move_cursor(10, 11);
+  printf_P(PSTR("Lives: %i"), lives);
 }
 
 uint8_t get_lives(void) {

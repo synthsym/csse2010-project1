@@ -142,25 +142,25 @@ void move_frog_forward(void) {
 	// We do this whether the frog is alive or not. 
 	frog_row++;
 	redraw_frog();
-	
-	// add 1 to the score
-	add_to_score(1);
-
-	// award halfway points if frog has reached the halfway point
-	if(frog_row == HALFWAY_ROW) {
-	  // if the halfway mark hasn't already been awarded
-	  if(!halfway_awarded) {
-	    add_to_score(4);
-	    halfway_awarded = 1;
-	  }
-	}
 
 	// If the frog has ended up successfully in row 7 - add it to the riverbank_status flag
 	// also add 10 to the score
-	if(frog_alive && frog_row == RIVERBANK_ROW) {
-		riverbank_status |= (1<<frog_column);
-		add_to_score(9);
-		halfway_awarded = 0;
+	if(frog_alive) {
+	  if(frog_row == RIVERBANK_ROW) {
+	    riverbank_status |= (1<<frog_column);
+      add_to_score(10);
+      halfway_awarded = 0;
+	  } else if(frog_row == HALFWAY_ROW) {
+	    // award halfway points if frog has reached the halfway point
+	    // if the halfway mark hasn't already been awarded
+      if(!halfway_awarded) {
+        add_to_score(5);
+        halfway_awarded = 1;
+      }
+	  } else {
+	    // add 1 to the score
+	    add_to_score(1);
+	  }
 	}
 }
 

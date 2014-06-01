@@ -21,6 +21,8 @@ void add_life(void) {
   if(lives < 4) {
     lives++;
   }
+  move_cursor(10, 11);
+  printf_P(PSTR("Lives: %i"), lives);
 }
 
 void remove_life(void) {

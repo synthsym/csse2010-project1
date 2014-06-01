@@ -266,6 +266,8 @@ void play_game(void) {
 
 		// display the number of lives
 		display_lives();
+		move_cursor(10, 11);
+		printf()
 	}
 
 	// We get here if the frog is supa-dead (has no more lives) or the riverbank is full
@@ -276,17 +278,14 @@ void next_level() {
   level++;
   if(level > 1) {
     add_life();
-
-    clear_terminal();
-    move_cursor(10,14);
-    printf_P(PSTR("CONGRATULATION"));
-    move_cursor(10,15);
-    printf_P(PSTR("Level %i"), level);
-    move_cursor(10,16);
-    printf_P(PSTR("Score: %i"), get_score());
-    move_cursor(10,17);
-    printf_P(PSTR("Press any button to continue"));
   }
+
+  clear_terminal();
+  move_cursor(10,15);
+  printf_P(PSTR("Level %i"), level);
+  move_cursor(10,16);
+  printf_P(PSTR("Score: %i"), get_score());
+  move_cursor(10,17);
 
   ledmatrix_clear();
   set_text_colour(COLOUR_RED);

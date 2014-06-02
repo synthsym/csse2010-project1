@@ -56,10 +56,13 @@ void show_highscores(uint8_t pos) {
 
   move_cursor(10, pos);
   printf_P(PSTR("HIGHSCORES"));
-  pos += 2;
+  uint8_t line = pos+2;
 
   for(uint8_t i = 0; i < LIST_SIZE; i++) {
-    move_cursor(10, pos+i);
-    printf_P(PSTR("%s\t%i"), scores[i].name, scores[i].score);
+    if(scores[i].score > 0) {
+      line++
+      move_cursor(10, line);
+      printf_P(PSTR("%s\t%i"), scores[i].name, scores[i].score);
+    }
   }
 }

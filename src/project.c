@@ -82,11 +82,13 @@ void initialise_hardware(void) {
 void splash_screen(void) {
 	// Clear terminal screen and output a message
 	clear_terminal();
-	move_cursor(10,10);
+	move_cursor(10,5);
 	printf_P(PSTR("Frogger"));
-	move_cursor(10,12);
+	move_cursor(10,7);
 	printf_P(PSTR("CSSE2010/7201 project by Adam Jacobus"));
 	
+	show_highscores(9);
+
 	// Output the scrolling message to the LED matrix
 	// and wait for a push button to be pushed.
 	ledmatrix_clear();
@@ -303,12 +305,16 @@ void handle_game_over() {
   game_over = 1;
 
   clear_terminal();
-	move_cursor(10,14);
+	move_cursor(10, 7);
 	printf_P(PSTR("GAME OVER"));
-	move_cursor(10,15);
+	move_cursor(10, 9);
 	printf_P(PSTR("SCORE %i"), get_score());
-	move_cursor(10,16);
-	printf_P(PSTR("Press a button to start again"));
+	if(is_highscore(score)) {
+	  move_cursor(10, 10);
+	  printf_P(PTSR("NEW HIGHSCORE!! Enter three initial below"));
+	}
+  move_cursor(10, 15);
+  printf_P(PSTR("Press a button to start again"));
 	
 	ledmatrix_clear();
 	set_text_colour(COLOUR_GREEN);

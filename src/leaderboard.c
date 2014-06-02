@@ -7,6 +7,9 @@
 
 #include "leaderboard.h"
 #include <avr/eeprom.h>
+#include <avr/pgmspace.h>
+#include "terminalio.h"
+#include <stdio.h>
 
 uint8_t is_highscore(uint16_t score) {
   highscore scores[LIST_SIZE];
@@ -47,6 +50,16 @@ void update_highscores(char name[3], uint16_t score) {
   eeprom_update_block(new_scores, 0, sizeof(new_scores));
 }
 
-void show_highscores(void) {
+void show_highscores(uint8_t pos) {
+  highscore scores[LIST_SIZE];
+  eeprom_read_block(scores, 0, sizeof(highscore[LIST_SIZE]));
 
+  move_cursor(10, pos);
+  printf_P(PSTR("HIGHSCORES"));
+  pos += 2;
+
+  for(uint8_t i = 0; i < LIST_SIZE; i++) {
+    move_cursor(10, pos+i);
+    printf_P(PSTR("%s\t%i"), scores[i].name, scores[i].score);
+  }
 }

@@ -102,8 +102,6 @@ void init_game(void) {
 	lane_position[0] = lane_position[1] = lane_position[2] = 0;
 	log_position[0] = log_position[1] = 0;
 	
-	// reset score
-	init_score();
 	halfway_awarded = 0;
 
 	// Initial riverbank pattern

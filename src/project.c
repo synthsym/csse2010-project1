@@ -21,6 +21,7 @@
 #include "joystick.h"
 #include "timer0.h"
 #include "game.h"
+#include "leaderboard.h"
 
 #define F_CPU 8000000L
 #include <util/delay.h>
@@ -303,20 +304,44 @@ void next_level() {
 
 void handle_game_over() {
   game_over = 1;
+  ledmatrix_clear();
 
+  if(is_highscore(get_score())) {
+    move_cursor(10, 7);
+    printf_P(PSTR("NEW HIGHSCORE!! Enter three initial below."));
+    uint8_t name[3] = "   ";
+    uint8_t pos = 0;
+    while(pos < 3) {
+      move_cursor(10+(pos*2), 9);
+      while(!serial_input_available()) {
+        ; //spin until input is found
+      }
+      char input = fgetc(stdin);
+      if(input == '\b') { //remove a character
+        if(pos > 0) { //if we aren't at the start of the list
+          name[pos-1] = ' ';
+          pos--;
+        } else {
+          name[pos] = ' ';
+        }
+      } else {
+        name[pos] = input;
+        pos++;
+      }
+      move_cursor(10, 9);
+      printf_P(PSTR("%c  %c  %c"), name[0], name[1], name[2]);
+    }
+    update_highscores(name, get_score());
+  }
   clear_terminal();
 	move_cursor(10, 7);
 	printf_P(PSTR("GAME OVER"));
 	move_cursor(10, 9);
 	printf_P(PSTR("SCORE %i"), get_score());
-	if(is_highscore(score)) {
-	  move_cursor(10, 10);
-	  printf_P(PTSR("NEW HIGHSCORE!! Enter three initial below"));
-	}
-  move_cursor(10, 15);
+	show_highscores(10);
+  move_cursor(10, 16);
   printf_P(PSTR("Press a button to start again"));
-	
-	ledmatrix_clear();
+
 	set_text_colour(COLOUR_GREEN);
 	while(1) {
     set_scrolling_display_text("GAME OVER");

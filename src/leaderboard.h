@@ -14,12 +14,12 @@
 #define LIST_SIZE 5
 
 typedef struct {
-  char name[3];
+  uint8_t name[3];
   uint16_t score;
 } highscore;
 
 uint8_t is_highscore(uint16_t score);
-void update_highscores(char name[3], uint16_t score);
-void show_highscores(void);
+void update_highscores(uint8_t name[3], uint16_t score);
+void show_highscores(uint8_t pos);
 
 #endif /* LEADERBOARD_H_ */

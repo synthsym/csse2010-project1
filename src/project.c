@@ -22,6 +22,7 @@
 #include "timer0.h"
 #include "game.h"
 #include "leaderboard.h"
+#include "timing.h"
 
 #define F_CPU 8000000L
 #include <util/delay.h>
@@ -74,6 +75,8 @@ void initialise_hardware(void) {
 	
 	init_timer0();
 	
+  init_timer();
+
 	init_joystick();
 
 	// Turn on global interrupts
@@ -152,6 +155,7 @@ void play_game(void) {
 	
 	init_game();
 	clear_terminal();
+	start_timer(42-(level*2));
 
 	// We play the game while the frog is alive and we haven't filled up the 
 	// far riverbank
@@ -160,11 +164,13 @@ void play_game(void) {
 			// Frog reached the other side successfully but the
 			// riverbank isn't full, put a new frog at the start
 			put_frog_at_start();
+			start_timer(42-(level*2));
 		}
 		
-		// remove a life if the frog dies
-		if(!is_frog_alive()) {
+		// remove a life if the frog dies or the timer runs out
+		if(!is_frog_alive() || timer_finished()) {
 		  remove_life();
+		  start_timer(42-(level*2));
 		  put_frog_at_start();
 		}
 

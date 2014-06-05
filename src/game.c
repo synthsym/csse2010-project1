@@ -322,7 +322,7 @@ static uint8_t frog_alive_at(uint8_t row, uint8_t column) {
 		case 6:
 			channel = row - 5;
 			bit_position = log_position[channel] + column;
-			if(bit_position >= LANE_DATA_WIDTH) {
+			if(bit_position >= LOG_DATA_WIDTH) {
 				bit_position -= LOG_DATA_WIDTH;
 			}
 			return (log_data[channel] >> bit_position) & 1;
